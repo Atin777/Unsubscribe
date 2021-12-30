@@ -38,13 +38,14 @@
             $email = mysqli_real_escape_string($conn, $_POST['email']);
 
             if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-
               $q = "insert into unsubscribe(email, ip, timestamp) values('".$email."', '".getIPAddress()."', '".$date."')";
               $r = mysqli_query($conn, $q);
 
               if($r){
                 echo 'Thank you for staying with us.';
               }
+            }else{
+              echo 'Enter valid email';
             }
           }else{
             echo 'Enter Email-Id';
