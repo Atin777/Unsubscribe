@@ -1,13 +1,13 @@
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
   <input type="text" name="email"> <input type="submit" name="submit" value="SUBMIT">
 </form>  
 
 <?php
 
-      $servername = "ls-88602a473fa09293021b7074cce3ace5c00b0494.caouk78dsjma.us-east-1.rds.amazonaws.com";
-      $username = "enroll";
-      $password = "Atech@98300$$!";
-      $dbname = "enroll";
+      $servername = "";
+      $username = "";
+      $password = "";
+      $dbname = "";
 
       $conn = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -15,20 +15,36 @@
 
       $date = date("Y-m-d H:i:s");
 
+      function getIPAddress() 
+      {             
+            if(!empty($_SERVER['HTTP_CLIENT_IP'])) 
+            {  
+                $ip = $_SERVER['HTTP_CLIENT_IP'];  
+            }             
+            elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) 
+            {  
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];  
+            }                
+            else
+            {  
+            $ip = $_SERVER['REMOTE_ADDR'];  
+            }  
+            return $ip;  
+      }
+
       if(isset($_POST['submit'])){
         if(isset($_POST['email'])){
           if(!empty($_POST['email'])){
             $email = mysqli_real_escape_string($conn, $_POST['email']);
-            
+
             if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-              $q = "insert into unsubscribe(email, timestamp) values('".$email."', '".$date."')";
+
+              $q = "insert into unsubscribe(email, ip, timestamp) values('".$email."', '".getIPAddress()."', '".$date."')";
               $r = mysqli_query($conn, $q);
 
               if($r){
                 echo 'Thank you for staying with us.';
               }
-            }else{
-              echo 'Enter valid Email-Id';
             }
           }else{
             echo 'Enter Email-Id';
