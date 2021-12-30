@@ -19,14 +19,17 @@
         if(isset($_POST['email'])){
           if(!empty($_POST['email'])){
             $email = mysqli_real_escape_string($conn, $_POST['email']);
+            
+            if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+              $q = "insert into unsubscribe(email, timestamp) values('".$email."', '".$date."')";
+              $r = mysqli_query($conn, $q);
 
-            $q = "insert into unsubscribe(email, timestamp) values('".$email."', '".$date."')";
-            $r = mysqli_query($conn, $q);
-
-            if($r){
-              echo 'Thank you for staying with us.';
+              if($r){
+                echo 'Thank you for staying with us.';
+              }
+            }else{
+              echo 'Enter valid Email-Id';
             }
-
           }else{
             echo 'Enter Email-Id';
           }
